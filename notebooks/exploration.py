@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # ===== CHARGER LES DONNEES =====
-df = pd.read_excel("data/patients_dakar.csv.xlsx")
+df = pd.read_csv("data/patients_dakar.csv")
 
 # ===== PREMIERS A P E R U S =====
 print ("=" * 50)
@@ -50,6 +50,14 @@ print (" Exploration terminee !")
 print (" Prochain lab : entrainer un modele ML")
 print (f"{ '= ' * 50}")
 
+# ===== EXERCICE 1 =====
+print("\n- - - Répartition par sexe et diagnostic ---")
+
+# On groupe par les deux colonnes et on compte la taille de chaque groupe
+repartition_sexe_diag = df.groupby(["sexe", "diagnostic"]).size()
+
+# On l'affiche de manière lisible
+print(repartition_sexe_diag)
 
 # ===== GENERATION DES GRAPHIQUES =====
 # --- GRAPHIQUE 1 : Répartition des diagnostics ---
