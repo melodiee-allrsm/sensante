@@ -94,7 +94,6 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy : {accuracy:.2%}")
 
 
-
         # Matrice de confusion
 cm = confusion_matrix(y_test, y_pred, labels=model.classes_)
 print("Matrice de confusion :")
@@ -210,6 +209,77 @@ for classe, proba in zip(model_loaded.classes_, probas):
     print(f"{classe:10s} : {proba:.1%} {bar}")
 
 
+# Importance des variables
+importances = model.feature_importances_
+
+for name, imp in sorted(
+    zip(feature_cols, importances),key=lambda x: x[1],reverse=True
+    ):
+    print(f"{name:20s} : {imp:.3f}")
+
+
+##Test avec 3 patients fictifs
+patients = [
+    {
+        'age': 19,
+        'sexe': 'M',
+        'temperature': 36.8,
+        'tension_sys': 110,
+        'toux': False,
+        'fatigue': False,
+        'maux_tete': False,
+        'region': 'Tambacounda'
+    },
+    {
+        'age': 22,
+        'sexe': 'M',
+        'temperature': 39.6,
+        'tension_sys': 120,
+        'toux': False,
+        'fatigue': False,
+        'maux_tete': False,
+        'region': 'Dakar'
+    },
+    {
+        'age': 70,
+        'sexe': 'M',
+        'temperature': 38.8,
+        'tension_sys': 110,
+        'toux': True,
+        'fatigue': False,
+        'maux_tete': False,
+        'region': 'Diourbel'
+    }
+
+]
+
+for i, patient in enumerate(patients, 1):
+    # Encoder les valeurs catégoriques
+    sexe_enc = le_sexe_loaded.transform([patient['sexe']])[0]
+    region_enc = le_region_loaded.transform([patient['region']])[0]
+
+    # Préparer le vecteur de features
+    features = [
+        patient['age'],
+        sexe_enc,
+        patient['temperature'],
+        patient['tension_sys'],
+        int(patient['toux']),
+        int(patient['fatigue']),
+        int(patient['maux_tete']),
+        region_enc
+    ]
+
+    # Prédire
+    diagnostic = model_loaded.predict([features])[0]
+    probas = model_loaded.predict_proba([features])[0]
+    proba_max = probas.max()
+
+    # Affichage des résultats
+    print(f"\n--- Patient {i} ---")
+    print(f"Profil : {patient}")
+    print(f"Diagnostic : {diagnostic}")
+    print(f"Probabilité : {proba_max:.1%}")
 
 
 ###Explication premiere partie
