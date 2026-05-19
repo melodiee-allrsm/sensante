@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import joblib
 import numpy as np
+from fastapi.middleware.cors import CORSMiddleware
 
 # --- Schemas Pydantic ---
 
@@ -161,3 +162,22 @@ def predict(patient: PatientInput):
         )
     )
 
+@app.get("/model-info")
+def model_info():
+    """ Informations sur le modele entrainé """
+    return {
+        "model_type": type(model).__name__,
+        "nb_arbres": len(model.estimators_) if hasattr(model, "estimators_") else None,
+        "classes_possibles": list(model.classes_) if hasattr(model, "classes_") else None,
+        "nb_features": len(feature_cols) if feature_cols is not None else None
+    }
+
+
+# Autoriser les requetes depuis le frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En dev : tout accepter
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
