@@ -10,6 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 from groq import Groq
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -251,10 +253,24 @@ def explain(data: ExplainInput):
                 {"role": "user", "content": user_prompt},
             ],
             max_tokens=200,
-            temperature=0.3,
+            temperature=0.5,
         )
         explication = response.choices[0].message.content
     except Exception as e:
         explication = f"Erreur lors de l'appel au LLM : {str(e)}"
 
     return ExplainOutput(explication=explication)
+
+
+# Servir le frontend comme fichier statique
+app.mount(
+    "/static",
+    StaticFiles(directory="frontend"),
+    name="static"
+)
+
+@app.get("/")
+def serve_frontend():
+    """Servir la page d'accueil."""
+    return FileResponse("frontend/index.html")
+
