@@ -6,31 +6,29 @@ colorTo: indigo
 sdk: docker
 pinned: false
 ---
-
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
 # SenSante
 
-Assistant de pre-diagnostic medical pour le Senegal.
+Assistant de pré-diagnostic médical pour le Sénégal.
 
-## Description
+## Démo en ligne
 
-SenSante utilise le Machine Learning pour aider au pre-diagnostic des maladies courantes (paludisme, grippe, typhoide) a partir des symptomes du patient.
+https://melodieecode-sensante.hf.space
 
-## Structure du projet
+## Stack technique
 
-- `data/` : Donnees patients (CSV)
-- `models/` : Modele ML serialise
-- `api/` : API FastAPI
-- `frontend/` : Interface web
-- `notebooks/` : Scripts d'exploration
+- Scikit-learn (modèle de Machine Learning)
+- FastAPI (API REST)
+- Tailwind CSS (interface responsive)
+- Groq / Llama 3 (explication des diagnostics par LLM)
+- Docker (conteneurisation)
 
 ## Auteur
 
-Mélodie Allarassem - DUT2 informatique - ESP/UCAD
-
-## Cours
-
-Integration de Modeles IA - Dr. El Hadji Bassirou TOURE
+Mélodie Allarassem  
+L2 GLSI – ESP/UCAD  
+2026
 
 
 
